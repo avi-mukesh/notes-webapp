@@ -9,10 +9,14 @@ const Notes = ({
     onTogglePin,
     showPinnedOnly,
     setShowPinnedOnly,
+    showNotesBox,
 }) => {
     const [noteSearch, setNoteSearch] = useState("")
+    const responsiveStyle = {
+        left: showNotesBox ? "0" : "-30vw",
+    }
     return (
-        <div className="notesBox">
+        <div className="notesBox" style={responsiveStyle}>
             <div className="notesBoxTop">
                 <h1 className="title">Notes</h1>
                 <button className="createNoteButton" onClick={onCreateNote}>

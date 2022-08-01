@@ -4,9 +4,8 @@ const dateOptions = {
     month: "short",
     day: "numeric",
 }
-const NoteView = ({ note, updateNote }) => {
+const NoteView = ({ note, updateNote, showNotesBox, setShowNotesBox }) => {
     const date = note.createdAt ? new Date(note.updatedAt) : Date.now()
-
     return (
         <div className="noteView">
             <textarea

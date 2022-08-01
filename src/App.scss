@@ -25,6 +25,7 @@ html {
 
   color: white;
   textarea {
+
     margin: 0; 
     padding: 5px 5px 0 5px;
     resize:none;
@@ -35,9 +36,29 @@ html {
     font-size: 4rem;
     background: transparent;
     color: white;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+  
+    /* Track */
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+  
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+    }
+  
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  
   }
   .noteViewTitle {
-    height: 20%;
+    height: 16%;
     font-weight: bold;
     border-bottom: 1px solid gray;
   }
@@ -47,9 +68,12 @@ html {
   }
   .noteViewText {
     margin-top: 10px;
-    height: 75%;
+    height: 79%;
     bottom: 0;
     font-size: 1.2rem;
+
+          /* width */
+      
   }
 
 }
@@ -67,6 +91,7 @@ html {
   overflow: scroll;
   overflow-x: hidden;
   height: 100vh;
+  transition: left 0.4s ease-in;
 
   .title {
     font-size: 40px;
@@ -101,6 +126,8 @@ html {
         transform: scale(1.01);
         box-shadow: rgb(52, 52, 52) 0px 0px 1px 1px;
       }
+
+
     }
 
 
@@ -122,8 +149,8 @@ html {
   &::-webkit-scrollbar {
     width: 0px;
   }
-}
 
+}
 
 .inputGroup{
   margin: 3px 6px;
@@ -154,7 +181,6 @@ html {
   }
 }
 
-
 .noteBox {
   cursor:pointer;
   padding: 1rem;
@@ -177,6 +203,7 @@ html {
     margin-bottom: 1rem;
   }
   p{
+    margin-right: 5px;
     max-height: 70px;
     font-size: 1rem;
     margin-bottom: 0.5rem;
@@ -185,8 +212,10 @@ html {
 }
 
 .noteButtons{
+  height: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
+  justify-content: space-between;
 
   .deleteNoteButton, .togglePinButton {
     margin-top: 3px;
@@ -200,5 +229,51 @@ html {
     }
   }
 }
+.toggleNotesBoxButton {
+  display: none;
+}
 
+@media screen and (max-width: 1024px) {
+  // .container{
+  //   display: block;
+  // };
 
+  .notesBox{
+    z-index:1;
+    left:-30vw;
+  }
+
+  .toggleNotesBoxButton {
+    z-index:2;
+    display:block;
+    background-color: transparent;
+    border:none;
+    outline:none;
+    font-size: 1.2rem;
+    color: white;
+    position:absolute;
+    margin: 0;
+    top: 3px;
+    left: -2px;
+    
+    // left: 160px;
+
+    &:hover{
+      cursor: pointer !important;
+    }
+  }
+  .noteView{
+    z-index: 0;
+    width: 100%;
+    textarea {
+      font-size: 2.5rem;
+    }
+    .noteViewTitle {
+      height: 10%;
+      text-align: center;
+    }
+    .noteViewText{
+      font-size: 1rem;
+    }
+  }
+}

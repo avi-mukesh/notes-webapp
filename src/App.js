@@ -2,11 +2,8 @@ import "./App.css"
 import Notes from "./Notes"
 import NoteView from "./NoteView"
 import { useState, useEffect, useRef, useCallback } from "react"
-
-// IMPORT FROM NODE BACKEND WHCIH RETRIEVED DATA FROM MONGODB
-// PROPERTIES TO ADD:
-//   - DATE CREATED,
-//   - PINNED
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faBars } from "@fortawesome/free-solid-svg-icons"
 const throttleImpl = (cb, delay) => {
     let isThrottled = false
     return (...args) => {
@@ -34,7 +31,7 @@ const App = () => {
     const [notes, setNotes] = useState([])
     const [selectedNote, setSelectedNote] = useState({})
     const [showPinnedOnly, setShowPinnedOnly] = useState(false)
-
+    const [showNotesBox, setShowNotesBox] = useState(false)
     // const invokedThrottle = useThrottle(, 100)
 
     useEffect(() => {
@@ -121,6 +118,21 @@ const App = () => {
 
     return (
         <div className="container">
+            <button
+                className="toggleNotesBoxButton"
+                onClick={() => {
+                    setShowNotesBox(!showNotesBox)
+                    console.log(showNotesBox)
+                }}
+            >
+                <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
+            </button>
+            <NoteView
+                note={selectedNote}
+                updateNote={updateNote}
+                showNotesBox={showNotesBox}
+                setShowNotesBox={setShowNotesBox}
+            />
             <Notes
                 notes={notes}
                 onSelectNote={onSelectNote}
@@ -129,8 +141,8 @@ const App = () => {
                 onTogglePin={onTogglePin}
                 showPinnedOnly={showPinnedOnly}
                 setShowPinnedOnly={setShowPinnedOnly}
+                showNotesBox={showNotesBox}
             />
-            <NoteView note={selectedNote} updateNote={updateNote} />
         </div>
     )
 }
