@@ -1,0 +1,136 @@
+
+.form-container{
+	width: 100%; /*makes form container fill wrapper...*/
+	max-width: 40rem; /*... but only up to a maximum width of 40rem (400px in this case)*/
+	background-color: #fff;
+	position: relative;
+	padding: 10rem 0; /*top and bottom padding of 10rem (100px in this case)*/
+	box-shadow: 0 1px 1.5rem rgba(0, 0, 0, 0.1);
+	border-radius: 1rem;
+	z-index: 1;
+}
+
+
+.form-heading{
+	color: rgb(0, 0, 0);
+	font-size: 2.5rem;
+	position: absolute; /*locks the heading relative to the form container*/
+	top: 10%;
+    left: 50%;
+	transform: translateX(-50%);
+
+	transition: left 500ms, transform 500ms;
+}
+
+form{
+	padding: 2rem 0;
+	background-color: #fff;
+	border-radius: 1rem;
+	box-shadow: 0 1px 1.5rem rgba(0, 0, 0, 0.1);
+
+	transition: transform 500ms, box-shadow 500ms;
+}
+
+.input-group{
+	width: 90%; /*input group takes up 90% of form's width*/
+	margin: 0 auto;
+	position: relative;
+	display: flex;
+	align-items: baseline;
+}
+
+.input-group input{
+	position: relative;
+	width: 100%;
+	padding: 1rem 0;
+	margin-top: 0.5rem;
+	border: none;
+	outline: none;
+	font-size: 1rem;
+	color: #fc6767;
+}
+
+.input-group > i{ /*picks only the <i> elements that are direct children of .input-group, not all descendants*/
+				/*this makes it so it doesn't apply these styles to the <i> element inside the submit button*/
+	font-size: 1.2rem;
+	margin-right: 1rem;
+	color: #fc6767;
+}
+
+.input-group .bar{
+	position: absolute;
+	left: 0;
+	bottom: 0; /*make the separation bar appear at the bottom of the input-group rather than the top*/
+	background-color: rgba(0, 0, 0, 0.1);
+	width: 100%;
+	height: 1px;
+}
+
+.input-group .bar::before{
+	content: "";
+	position: absolute;	
+	background-color: #fc6767;
+	width: 0;
+	height: 2px;
+	transition: width 650ms; /*when width property is changed, animate it - easier than animating using keyframes*/
+}
+
+.input-group input:focus + .bar::before{ /*all .bar::before that immediately folow a focused input are selected*/
+	width: 100%;
+}
+
+.input-group button{
+	margin: 3rem auto;
+	padding: 1rem 5rem;
+	background: linear-gradient(to left, #fc6767, #ec008c);
+	border: none;
+	color: #fff;
+	font-size: 1rem;
+	cursor: pointer;
+	border-radius: 3rem;
+	transition: color 400ms;
+}
+
+.input-group button:focus,
+.input-group button:hover{
+	background: linear-gradient(to right, #fc6767, #ec008c);
+	outline: none;
+	color: #000;
+}
+
+.switch-login{
+	text-align: center;
+}
+
+.switch-login a{
+	text-decoration: none;
+	color: #A1A1A1;
+	font-size: 1rem;
+}
+
+.switch-login a span{
+	color: #fc6767;
+}
+
+.switch-login a span:hover{
+	color: #fc6767;
+	padding-bottom: 2px;
+	border-bottom: 1px solid #fc6767
+}
+
+@media screen and (max-width: 700px){
+	.form-container::before{
+		height: 10rem;
+	}
+
+	.form-heading{
+		left: 50%; /*align header perfectly horizontally centered*/
+		transform: translateX(-50%);
+	}
+
+	form{
+		border-radius: initial;
+		transform: translateY(5rem);
+		box-shadow: none;
+	}
+}

@@ -7,8 +7,6 @@ const Notes = ({
     onCreateNote,
     onDeleteNote,
     onTogglePin,
-    showPinnedOnly,
-    setShowPinnedOnly,
     showNotesBox,
     tablet,
 }) => {
@@ -31,22 +29,6 @@ const Notes = ({
                     value={noteSearch}
                     onChange={(e) => setNoteSearch(e.target.value)}
                 />
-                {/* {notes.length && (
-                    <div className="inputGroup">
-                        <label
-                            className="inputLabel"
-                            htmlFor="showPinnedCheckbox"
-                        >
-                            Pinned notes
-                        </label>
-                        <input
-                            type="checkbox"
-                            id="showPinnedCheckbox"
-                            value={showPinnedOnly}
-                            onChange={() => setShowPinnedOnly(!showPinnedOnly)}
-                        />
-                    </div>
-                )} */}
             </div>
 
             {notes.length > 0 ? (
@@ -61,13 +43,7 @@ const Notes = ({
                                     ?.toLowerCase()
                                     ?.includes(noteSearch.toLowerCase())
                         )
-                        .filter((note) => {
-                            if (showPinnedOnly) {
-                                return note.pinned
-                            } else {
-                                return true
-                            }
-                        })
+                        .sort((noteA, noteB) => noteB.pinned - noteA.pinned)
                         .map((note) => (
                             <Note
                                 note={note}
