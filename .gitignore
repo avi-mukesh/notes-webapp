@@ -10,6 +10,8 @@
 
 # production
 /build
+/src/App.scss
+
 
 # misc
 .DS_Store

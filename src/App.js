@@ -2,8 +2,10 @@ import "./App.css"
 import Notes from "./Notes"
 import NoteView from "./NoteView"
 import { useState, useEffect, useRef, useCallback } from "react"
+import { useMediaQuery } from "react-responsive"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
+
 const throttleImpl = (cb, delay) => {
     let isThrottled = false
     return (...args) => {
@@ -28,6 +30,8 @@ function useThrottle(cb, delay) {
 }
 
 const App = () => {
+    const tablet = useMediaQuery({ maxWidth: "900px" })
+
     const [notes, setNotes] = useState([])
     const [selectedNote, setSelectedNote] = useState({})
     const [showPinnedOnly, setShowPinnedOnly] = useState(false)
@@ -112,6 +116,7 @@ const App = () => {
         return json.note
     }
     const onSelectNote = async (id) => {
+        if (tablet) setShowNotesBox(false)
         const note = await getNoteById(id)
         setSelectedNote(note)
     }
@@ -121,8 +126,9 @@ const App = () => {
             <button
                 className="toggleNotesBoxButton"
                 onClick={() => {
-                    setShowNotesBox(!showNotesBox)
-                    console.log(showNotesBox)
+                    if (tablet) {
+                        setShowNotesBox(!showNotesBox)
+                    }
                 }}
             >
                 <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
@@ -142,6 +148,7 @@ const App = () => {
                 showPinnedOnly={showPinnedOnly}
                 setShowPinnedOnly={setShowPinnedOnly}
                 showNotesBox={showNotesBox}
+                tablet={tablet}
             />
         </div>
     )

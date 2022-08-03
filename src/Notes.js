@@ -10,39 +10,45 @@ const Notes = ({
     showPinnedOnly,
     setShowPinnedOnly,
     showNotesBox,
+    tablet,
 }) => {
     const [noteSearch, setNoteSearch] = useState("")
-    const responsiveStyle = {
-        left: showNotesBox ? "0" : "-30vw",
-    }
+
     return (
-        <div className="notesBox" style={responsiveStyle}>
+        <div
+            className="notesBox"
+            style={{ left: tablet && !showNotesBox ? "-100%" : "0" }}
+        >
             <div className="notesBoxTop">
                 <h1 className="title">Notes</h1>
                 <button className="createNoteButton" onClick={onCreateNote}>
                     +
                 </button>
+                <input
+                    type="text"
+                    className="searchNoteInput"
+                    placeholder="Search"
+                    value={noteSearch}
+                    onChange={(e) => setNoteSearch(e.target.value)}
+                />
+                {/* {notes.length && (
+                    <div className="inputGroup">
+                        <label
+                            className="inputLabel"
+                            htmlFor="showPinnedCheckbox"
+                        >
+                            Pinned notes
+                        </label>
+                        <input
+                            type="checkbox"
+                            id="showPinnedCheckbox"
+                            value={showPinnedOnly}
+                            onChange={() => setShowPinnedOnly(!showPinnedOnly)}
+                        />
+                    </div>
+                )} */}
             </div>
-            <input
-                type="text"
-                className="searchNoteInput"
-                placeholder="Search"
-                value={noteSearch}
-                onChange={(e) => setNoteSearch(e.target.value)}
-            />
-            {notes.length && (
-                <div className="inputGroup">
-                    <label className="inputLabel" htmlFor="showPinnedCheckbox">
-                        Show pinned notes only
-                    </label>
-                    <input
-                        type="checkbox"
-                        id="showPinnedCheckbox"
-                        value={showPinnedOnly}
-                        onChange={() => setShowPinnedOnly(!showPinnedOnly)}
-                    />
-                </div>
-            )}
+
             {notes.length > 0 ? (
                 <>
                     {notes
