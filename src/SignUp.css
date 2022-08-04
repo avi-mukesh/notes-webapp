@@ -2,7 +2,6 @@
 .form-container{
 	width: 100%; /*makes form container fill wrapper...*/
 	max-width: 40rem; /*... but only up to a maximum width of 40rem (400px in this case)*/
-	background-color: #fff;
 	position: relative;
 	padding: 10rem 0; /*top and bottom padding of 10rem (100px in this case)*/
 	box-shadow: 0 1px 1.5rem rgba(0, 0, 0, 0.1);
@@ -12,13 +11,13 @@
 
 
 .form-heading{
-	color: rgb(0, 0, 0);
-	font-size: 2.5rem;
+	color: white;
+	font-size: 40px;
+    font-weight: bold;
 	position: absolute; /*locks the heading relative to the form container*/
 	top: 10%;
     left: 50%;
 	transform: translateX(-50%);
-
 	transition: left 500ms, transform 500ms;
 }
 
@@ -27,7 +26,6 @@ form{
 	background-color: #fff;
 	border-radius: 1rem;
 	box-shadow: 0 1px 1.5rem rgba(0, 0, 0, 0.1);
-
 	transition: transform 500ms, box-shadow 500ms;
 }
 
@@ -47,14 +45,14 @@ form{
 	border: none;
 	outline: none;
 	font-size: 1rem;
-	color: #fc6767;
+	color: #434343;
 }
 
 .input-group > i{ /*picks only the <i> elements that are direct children of .input-group, not all descendants*/
 				/*this makes it so it doesn't apply these styles to the <i> element inside the submit button*/
 	font-size: 1.2rem;
 	margin-right: 1rem;
-	color: #fc6767;
+	color: #5cacd4;
 }
 
 .input-group .bar{
@@ -69,7 +67,7 @@ form{
 .input-group .bar::before{
 	content: "";
 	position: absolute;	
-	background-color: #fc6767;
+	background-color: #5cacd4;
 	width: 0;
 	height: 2px;
 	transition: width 650ms; /*when width property is changed, animate it - easier than animating using keyframes*/
@@ -82,7 +80,7 @@ form{
 .input-group button{
 	margin: 3rem auto;
 	padding: 1rem 5rem;
-	background: linear-gradient(to left, #fc6767, #ec008c);
+	background: linear-gradient(to left, #5cacd4, #80d0e2);
 	border: none;
 	color: #fff;
 	font-size: 1rem;
@@ -93,7 +91,7 @@ form{
 
 .input-group button:focus,
 .input-group button:hover{
-	background: linear-gradient(to right, #fc6767, #ec008c);
+	background: linear-gradient(to right,#5cacd4, #80d0e2);
 	outline: none;
 	color: #000;
 }
@@ -101,7 +99,6 @@ form{
 .switch-login{
 	text-align: center;
 }
-
 .switch-login a{
 	text-decoration: none;
 	color: #A1A1A1;
@@ -109,13 +106,14 @@ form{
 }
 
 .switch-login a span{
-	color: #fc6767;
+	color: #5cacd4;
+	margin-left: 1rem;
 }
 
 .switch-login a span:hover{
-	color: #fc6767;
+	color: #5cacd4;
 	padding-bottom: 2px;
-	border-bottom: 1px solid #fc6767
+	border-bottom: 1px solid #5cacd4;
 }
 
 @media screen and (max-width: 700px){

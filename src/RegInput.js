@@ -1,12 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const RegInput = ({ icon, type, placeholder }) => (
-    <div class="input-group">
+    <div className="input-group">
         <i>
             <FontAwesomeIcon icon={icon}></FontAwesomeIcon>
         </i>
         <input type={type} placeholder={placeholder} />
-        <span class="bar"></span>
+        <span className="bar"></span>
     </div>
 )
 
