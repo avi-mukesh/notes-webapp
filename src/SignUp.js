@@ -4,11 +4,10 @@ import SignUpForm from "./SignUpForm.js"
 
 const SignUp = () => {
     const location = useLocation()
-    console.log(location.pathname)
 
     return (
         <div className="form-container">
-            {location.pathname === "/login" ? <SignInForm /> : <SignUpForm />}
+            {location.pathname === "/signin" ? <SignInForm /> : <SignUpForm />}
         </div>
     )
 }

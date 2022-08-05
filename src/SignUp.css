@@ -96,21 +96,21 @@ form{
 	color: #000;
 }
 
-.switch-login{
+.switch-signin{
 	text-align: center;
 }
-.switch-login a{
+.switch-signin a{
 	text-decoration: none;
 	color: #A1A1A1;
 	font-size: 1rem;
 }
 
-.switch-login a span{
+.switch-signin a span{
 	color: #5cacd4;
 	margin-left: 1rem;
 }
 
-.switch-login a span:hover{
+.switch-signin a span:hover{
 	color: #5cacd4;
 	padding-bottom: 2px;
 	border-bottom: 1px solid #5cacd4;

@@ -1,11 +1,6 @@
 import "./App.css"
 import "./SignUp.css"
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    useRoutes,
-} from "react-router-dom"
+import { BrowserRouter as Router, useRoutes } from "react-router-dom"
 import Home from "./Home.js"
 import SignUp from "./SignUp.js"
 import NotFound from "./NotFound.js"
@@ -13,7 +8,7 @@ import NotFound from "./NotFound.js"
 const AppInside = () =>
     useRoutes([
         { path: "/", element: <SignUp /> },
-        { path: "/login", element: <SignUp /> },
+        { path: "/signin", element: <SignUp /> },
         { path: "/home", element: <Home /> },
         { path: "*", element: <NotFound /> },
     ])
