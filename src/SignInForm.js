@@ -2,10 +2,13 @@ import RegInput from "./RegInput"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUser, faLock, faPaperPlane } from "@fortawesome/free-solid-svg-icons"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-const SignInForm = () => {
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
+const SignInForm = ({ setAccessToken }) => {
+    const [username, setUsername] = useState("avi")
+    const [password, setPassword] = useState("my-password")
+
+    const navigate = useNavigate()
 
     const signinSubmit = async (e) => {
         e.preventDefault()
@@ -18,8 +21,9 @@ const SignInForm = () => {
             }),
         })
         let json = await res.json()
-
-        console.log(json.message)
+        console.log(json.accessToken)
+        setAccessToken(json.accessToken)
+        navigate("/home")
     }
 
     return (

@@ -5,7 +5,7 @@ import { useMediaQuery } from "react-responsive"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
 
-const Home = () => {
+const Home = ({ accessToken }) => {
     const tablet = useMediaQuery({ maxWidth: "900px" })
 
     const [notes, setNotes] = useState([])
@@ -14,12 +14,16 @@ const Home = () => {
 
     useEffect(() => {
         async function fetchData() {
-            let response = await fetch("http://localhost:5000/notes")
+            let response = await fetch("http://localhost:5000/notes", {
+                headers: {
+                    authorization: `Bearer ${accessToken}`,
+                },
+            })
             let notes = await response.json()
             setNotes(notes)
         }
         fetchData()
-    }, [notes])
+    }, [notes, accessToken])
 
     const onCreateNote = () => {
         createNote({ title: "", text: "" })
@@ -30,6 +34,7 @@ const Home = () => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify({ id }),
         })
@@ -39,7 +44,10 @@ const Home = () => {
         console.log("Creating note")
         const response = await fetch(`http://localhost:5000/create_note`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${accessToken}`,
+            },
             body: JSON.stringify({
                 title: note.title,
                 text: note.text,
@@ -59,7 +67,10 @@ const Home = () => {
                 `http://localhost:5000/update_note/${note.id}`,
                 {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        authorization: `Bearer ${accessToken}`,
+                    },
                     body: JSON.stringify({
                         title: note.title,
                         text: note.text,
@@ -77,17 +88,22 @@ const Home = () => {
 
     const onTogglePin = async (note) => {
         console.log("toggling", note)
-        const response = await fetch(
-            `http://localhost:5000/update_note/${note.id}`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ pinned: !note.pinned }),
-            }
-        )
+        await fetch(`http://localhost:5000/update_note/${note.id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({ pinned: !note.pinned }),
+        })
     }
     const getNoteById = async (id) => {
-        const response = await fetch(`http://localhost:5000/note/${id}`)
+        console.log("getting note", id)
+        const response = await fetch(`http://localhost:5000/note/${id}`, {
+            headers: {
+                authorization: `Bearer ${accessToken}`,
+            },
+        })
         const json = await response.json()
         return json.note
     }
