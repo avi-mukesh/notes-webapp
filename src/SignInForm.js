@@ -14,6 +14,7 @@ const SignInForm = ({ setAccessToken }) => {
         e.preventDefault()
         let res = await fetch("http://localhost:5000/auth/signin", {
             method: "POST",
+            credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 username: username,
@@ -22,15 +23,16 @@ const SignInForm = ({ setAccessToken }) => {
         })
         let json = await res.json()
         console.log(json.accessToken)
-        setAccessToken(json.accessToken)
-        navigate("/home")
+        if (json.accessToken) {
+            setAccessToken(json.accessToken)
+            navigate("/home")
+        } else {
+            console.log(json.message)
+        }
     }
 
     return (
         <>
-            <p style={{ color: "white" }}>
-                {username} + {password}
-            </p>
             <span className="form-heading">Sign in</span>
             <form onSubmit={signinSubmit}>
                 <RegInput

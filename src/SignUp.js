@@ -1,9 +1,15 @@
-import { useLocation } from "react-router-dom"
+import { useEffect } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import SignInForm from "./SignInForm.js"
 import SignUpForm from "./SignUpForm.js"
 
-const SignUp = ({ setAccessToken }) => {
+const SignUp = ({ accessToken, setAccessToken }) => {
+    const navigate = useNavigate()
     const location = useLocation()
+
+    useEffect(() => {
+        if (accessToken) navigate("/home")
+    }, [accessToken, navigate])
 
     return (
         <div className="form-container">

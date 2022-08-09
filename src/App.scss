@@ -161,9 +161,25 @@ html {
 
     }
 
+    .signOutButton{
+      justify-self: end;
+      text-decoration: none;
+      font-size: 1rem;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      color: #5cacd4;
+      padding: 2px;
+      margin-bottom: 2px;
 
+        &:hover{
+          cursor: pointer;
+          color: #5cacd4;
+          text-decoration: underline;
+        }
+      
+    }
   }
-
 
 
   &::-webkit-scrollbar {

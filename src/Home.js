@@ -2,10 +2,13 @@ import Notes from "./Notes"
 import NoteView from "./NoteView"
 import { useState, useEffect } from "react"
 import { useMediaQuery } from "react-responsive"
+import { useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
 
-const Home = ({ accessToken }) => {
+const Home = ({ accessToken, setAccessToken }) => {
+    const navigate = useNavigate()
+
     const tablet = useMediaQuery({ maxWidth: "900px" })
 
     const [notes, setNotes] = useState([])
@@ -19,11 +22,19 @@ const Home = ({ accessToken }) => {
                     authorization: `Bearer ${accessToken}`,
                 },
             })
-            let notes = await response.json()
-            setNotes(notes)
+            let data = await response.json()
+            if (data.message) {
+                console.log(data.message)
+            } else {
+                setNotes(data)
+            }
         }
-        fetchData()
-    }, [notes, accessToken])
+        if (accessToken) {
+            fetchData()
+        } else {
+            navigate("/signin")
+        }
+    }, [notes, accessToken, navigate])
 
     const onCreateNote = () => {
         createNote({ title: "", text: "" })
@@ -113,6 +124,15 @@ const Home = ({ accessToken }) => {
         setSelectedNote(note)
     }
 
+    const onSignOut = async () => {
+        await fetch("http://localhost:5000/auth/signout", {
+            method: "DELETE",
+            credentials: "include",
+        })
+        setAccessToken("")
+        navigate("/signin")
+    }
+
     return (
         <div>
             <button
@@ -134,6 +154,7 @@ const Home = ({ accessToken }) => {
                 onTogglePin={onTogglePin}
                 showNotesBox={showNotesBox}
                 tablet={tablet}
+                onSignOut={onSignOut}
             />
         </div>
     )

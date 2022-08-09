@@ -1,50 +1,67 @@
 import "./App.css"
 import "./SignUp.css"
-import { useState } from "react"
-import {
-    BrowserRouter as Router,
-    Route,
-    Routes,
-    useRoutes,
-} from "react-router-dom"
+import { useState, useEffect } from "react"
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import Home from "./Home.js"
 import SignUp from "./SignUp.js"
 import NotFound from "./NotFound.js"
 
-// const AppInside = ({ accessToken, setAccessToken }) => {
-//     console.log(accessToken)
-//     useRoutes([
-//         { path: "/", element: <SignUp /> },
-//         {
-//             path: "/signin",
-//             element: <SignUp />,
-//         },
-//         { path: "/home", element: <Home /> },
-//         { path: "*", element: <NotFound /> },
-//     ])
-// }
 const App = () => {
     const [accessToken, setAccessToken] = useState("")
+
+    // firs thing when page is rendered, get a new accessToken if refreshToken exists
+    useEffect(() => {
+        async function checkRefreshToken() {
+            const result = await fetch(
+                "http://localhost:5000/auth/refresh_token",
+                {
+                    method: "POST",
+                    credentials: "include", // needed to include the cookie
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+            const json = await result.json()
+            console.log("check refresh token", json)
+            setAccessToken(json.accessToken)
+        }
+
+        checkRefreshToken()
+    }, [])
+
+
 
     return (
         <div className="container">
             <Router>
-                {/* <AppInside
-                    accessToken={accessToken}
-                    setAccessToken={setAccessToken}
-                /> */}
                 <Routes>
                     <Route
                         path="/"
-                        element={<SignUp setAccessToken={setAccessToken} />}
+                        element={
+                            <SignUp
+                                accessToken={accessToken}
+                                setAccessToken={setAccessToken}
+                            />
+                        }
                     />
                     <Route
                         path="/signin"
-                        element={<SignUp setAccessToken={setAccessToken} />}
+                        element={
+                            <SignUp
+                                accessToken={accessToken}
+                                setAccessToken={setAccessToken}
+                            />
+                        }
                     />
                     <Route
                         path="/home"
-                        element={<Home accessToken={accessToken} />}
+                        element={
+                            <Home
+                                accessToken={accessToken}
+                                setAccessToken={setAccessToken}
+                            />
+                        }
                     />
                     <Route path="*" element={<NotFound />} />
                 </Routes>

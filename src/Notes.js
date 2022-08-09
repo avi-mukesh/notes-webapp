@@ -9,6 +9,7 @@ const Notes = ({
     onTogglePin,
     showNotesBox,
     tablet,
+    onSignOut,
 }) => {
     const [noteSearch, setNoteSearch] = useState("")
 
@@ -29,6 +30,9 @@ const Notes = ({
                     value={noteSearch}
                     onChange={(e) => setNoteSearch(e.target.value)}
                 />
+                <button className="signOutButton" onClick={onSignOut}>
+                    Sign out
+                </button>
             </div>
 
             {notes.length > 0 ? (
