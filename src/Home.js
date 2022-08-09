@@ -34,14 +34,31 @@ const Home = ({ accessToken, setAccessToken }) => {
         } else {
             navigate("/signin")
         }
-    }, [notes, accessToken, navigate])
+    }, [accessToken, navigate, selectedNote])
 
-    const onCreateNote = () => {
+    const onCreateNote = async () => {
+        if (selectedNote.id) {
+            await fetch(
+                `http://localhost:5000/update_note/${selectedNote.id}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        authorization: `Bearer ${accessToken}`,
+                    },
+                    body: JSON.stringify({
+                        title: selectedNote.title,
+                        text: selectedNote.text,
+                        pinned: selectedNote.pinned,
+                    }),
+                }
+            )
+        }
         createNote({ title: "", text: "" })
     }
 
     const onDeleteNote = async (id) => {
-        await fetch("http://localhost:5000/delete_note", {
+        fetch("http://localhost:5000/delete_note", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -49,6 +66,11 @@ const Home = ({ accessToken, setAccessToken }) => {
             },
             body: JSON.stringify({ id }),
         })
+            .then(() => {
+                setNotes(notes.filter((note) => note.id !== id))
+                setSelectedNote({})
+            })
+            .catch((err) => console.log(err.message))
     }
 
     const createNote = async (note) => {
@@ -74,39 +96,34 @@ const Home = ({ accessToken, setAccessToken }) => {
             createNote(note)
         } else {
             console.log(selectedNote)
-            const response = await fetch(
-                `http://localhost:5000/update_note/${note.id}`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        authorization: `Bearer ${accessToken}`,
-                    },
-                    body: JSON.stringify({
-                        title: note.title,
-                        text: note.text,
-                        pinned: note.pinned,
-                    }),
-                }
-            )
-            const json = await response.json()
-            const updatedNote = json.note
+            setSelectedNote({
+                ...selectedNote,
+                title: note.title,
+                text: note.text,
+                pinned: note.pinned,
+            })
+
             console.log("Now updating")
 
-            setSelectedNote(updatedNote)
+            // setSelectedNote(updatedNote)
         }
     }
 
     const onTogglePin = async (note) => {
         console.log("toggling", note)
-        await fetch(`http://localhost:5000/update_note/${note.id}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                authorization: `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify({ pinned: !note.pinned }),
-        })
+        const response = await fetch(
+            `http://localhost:5000/update_note/${note.id}`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify({ pinned: !note.pinned }),
+            }
+        )
+        const json = await response.json()
+        setSelectedNote(json.note)
     }
     const getNoteById = async (id) => {
         console.log("getting note", id)
@@ -119,8 +136,27 @@ const Home = ({ accessToken, setAccessToken }) => {
         return json.note
     }
     const onSelectNote = async (id) => {
+        if (selectedNote.id) {
+            await fetch(
+                `http://localhost:5000/update_note/${selectedNote.id}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        authorization: `Bearer ${accessToken}`,
+                    },
+                    body: JSON.stringify({
+                        title: selectedNote.title,
+                        text: selectedNote.text,
+                        pinned: selectedNote.pinned,
+                    }),
+                }
+            )
+        }
+
         if (tablet) setShowNotesBox(false)
         const note = await getNoteById(id)
+        console.log("selecting a note...")
         setSelectedNote(note)
     }
 
