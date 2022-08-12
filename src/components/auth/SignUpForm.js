@@ -7,33 +7,43 @@ import {
     faLock,
     faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons"
+import Alert from "../Alert"
+
+import { SERVER_URL } from "../../consts.js"
 
 const SignUpForm = () => {
+    const [error, setError] = useState("")
+
     const [username, setUsername] = useState("avi")
     const [email, setEmail] = useState("avimukesh10@gmail.com")
     const [password, setPassword] = useState("my-password")
     const [confirmPassword, setConfirmPassword] = useState("my-password")
 
     const signupSubmit = async (e) => {
-        e.preventDefault()
-        console.log("trying to sign up")
-        let res = await fetch("http://localhost:5000/auth/signup", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                username: username,
-                email: email,
-                password: password,
-            }),
-        })
-
-        let json = await res.json()
-
-        console.log(json.message)
+        try {
+            e.preventDefault()
+            console.log("trying to sign up")
+            let result = await fetch(`${SERVER_URL}/auth/signup`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password,
+                }),
+            })
+            let json = await result.json()
+            if (result.status >= 400) {
+                setError(json.message)
+            }
+        } catch (err) {
+            setError("Error: couldn't sign up")
+        }
     }
 
     return (
         <>
+            <Alert error={error} setError={setError} />
             <span className="form-heading">Sign up</span>
             <form onSubmit={signupSubmit}>
                 <RegInput

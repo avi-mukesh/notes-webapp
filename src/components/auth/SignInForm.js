@@ -1,10 +1,16 @@
 import RegInput from "./RegInput"
+import Alert from "../Alert"
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUser, faLock, faPaperPlane } from "@fortawesome/free-solid-svg-icons"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
+import { SERVER_URL } from "../../consts.js"
+
 const SignInForm = ({ setAccessToken }) => {
+    const [error, setError] = useState("")
+
     const [username, setUsername] = useState("avi")
     const [password, setPassword] = useState("my-password")
 
@@ -12,27 +18,33 @@ const SignInForm = ({ setAccessToken }) => {
 
     const signinSubmit = async (e) => {
         e.preventDefault()
-        let res = await fetch("http://localhost:5000/auth/signin", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                username: username,
-                password: password,
-            }),
-        })
-        let json = await res.json()
-        console.log(json.accessToken)
-        if (json.accessToken) {
-            setAccessToken(json.accessToken)
-            navigate("/home")
-        } else {
-            console.log(json.message)
+        try {
+            let result = await fetch(`${SERVER_URL}/auth/signin`, {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            })
+            let json = await result.json()
+
+            if (result.status >= 400) {
+                setError(json.message)
+            } else if (json.accessToken) {
+                setAccessToken(json.accessToken)
+                navigate("/home")
+            }
+        } catch (err) {
+            setError("Error: couldn't sign in")
         }
     }
 
     return (
         <>
+            <Alert error={error} setError={setError} />
+
             <span className="form-heading">Sign in</span>
             <form onSubmit={signinSubmit}>
                 <RegInput

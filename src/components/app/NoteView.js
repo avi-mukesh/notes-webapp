@@ -1,10 +1,11 @@
+
 const dateOptions = {
     weekday: "short",
     year: "numeric",
     month: "short",
     day: "numeric",
 }
-const NoteView = ({ note, updateNote }) => {
+const NoteView = ({ note, updateNote}) => {
     const date = note.createdAt ? new Date(note.updatedAt) : Date.now()
     return (
         <div className="noteView">

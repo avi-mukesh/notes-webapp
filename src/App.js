@@ -1,39 +1,43 @@
-import "./App.css"
-import "./SignUp.css"
+import "./styles/App.css"
+import "./style/SignUp.css"
 import { useState, useEffect } from "react"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
-import Home from "./Home.js"
-import SignUp from "./SignUp.js"
-import NotFound from "./NotFound.js"
+import Home from "./components/app/Home.js"
+import SignUp from "./components/auth/SignUp.js"
+import NotFound from "./components/NotFound.js"
+import Alert from "./components/Alert.js"
+
+import { SERVER_URL } from "./consts"
 
 const App = () => {
+    const [error, setError] = useState("")
     const [accessToken, setAccessToken] = useState("")
 
-    // firs thing when page is rendered, get a new accessToken if refreshToken exists
+    // first thing when page is rendered, get a new accessToken if refreshToken exists
     useEffect(() => {
         async function checkRefreshToken() {
-            const result = await fetch(
-                "http://localhost:5000/auth/refresh_token",
-                {
-                    method: "POST",
-                    credentials: "include", // needed to include the cookie
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            )
+            const result = await fetch(`${SERVER_URL}/auth/refresh_token`, {
+                method: "POST",
+                credentials: "include", // needed to include the cookie
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
             const json = await result.json()
-            console.log("check refresh token", json)
-            setAccessToken(json.accessToken)
+            if (result.status >= 400) {
+                setError(json.message)
+            } else {
+                setAccessToken(json.accessToken)
+            }
         }
 
         checkRefreshToken()
     }, [])
 
-
-
     return (
         <div className="container">
+            <Alert error={error} setError={setError} />
+
             <Router>
                 <Routes>
                     <Route

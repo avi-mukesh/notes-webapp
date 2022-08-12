@@ -5,8 +5,13 @@ import { useMediaQuery } from "react-responsive"
 import { useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
+import Alert from "../Alert.js"
+
+import { SERVER_URL } from "../../consts.js"
 
 const Home = ({ accessToken, setAccessToken }) => {
+    const [error, setError] = useState("")
+
     const navigate = useNavigate()
 
     const tablet = useMediaQuery({ maxWidth: "900px" })
@@ -17,16 +22,16 @@ const Home = ({ accessToken, setAccessToken }) => {
 
     useEffect(() => {
         async function fetchData() {
-            let response = await fetch("http://localhost:5000/notes", {
+            let response = await fetch(`${SERVER_URL}/notes`, {
                 headers: {
                     authorization: `Bearer ${accessToken}`,
                 },
             })
-            let data = await response.json()
-            if (data.message) {
-                console.log(data.message)
+            let json = await response.json()
+            if (response.status >= 400) {
+                setError(json.message)
             } else {
-                setNotes(data)
+                setNotes(json)
             }
         }
         if (accessToken) {
@@ -34,12 +39,13 @@ const Home = ({ accessToken, setAccessToken }) => {
         } else {
             navigate("/signin")
         }
+        // fetch notes when accessToken changes, or when the selected note changes
     }, [accessToken, navigate, selectedNote])
 
     const onCreateNote = async () => {
         if (selectedNote.id) {
-            await fetch(
-                `http://localhost:5000/update_note/${selectedNote.id}`,
+            const response = await fetch(
+                `${SERVER_URL}/update_note/${selectedNote.id}`,
                 {
                     method: "POST",
                     headers: {
@@ -53,12 +59,16 @@ const Home = ({ accessToken, setAccessToken }) => {
                     }),
                 }
             )
+            const json = await response.json()
+            if (response.status >= 400) {
+                setError(json.message)
+            }
         }
         createNote({ title: "", text: "" })
     }
 
     const onDeleteNote = async (id) => {
-        fetch("http://localhost:5000/delete_note", {
+        fetch(`${SERVER_URL}/delete_note`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -70,12 +80,12 @@ const Home = ({ accessToken, setAccessToken }) => {
                 setNotes(notes.filter((note) => note.id !== id))
                 setSelectedNote({})
             })
-            .catch((err) => console.log(err.message))
+            .catch((err) => setError(err.message))
     }
 
     const createNote = async (note) => {
         console.log("Creating note")
-        const response = await fetch(`http://localhost:5000/create_note`, {
+        const response = await fetch(`${SERVER_URL}/create_note`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -87,8 +97,13 @@ const Home = ({ accessToken, setAccessToken }) => {
             }),
         })
         const json = await response.json()
-        const newNote = json.note
-        setSelectedNote(newNote)
+
+        if (response.status >= 400) {
+            setError(json.message)
+        } else {
+            const newNote = json.note
+            setSelectedNote(newNote)
+        }
     }
 
     const updateNote = async (note) => {
@@ -102,43 +117,46 @@ const Home = ({ accessToken, setAccessToken }) => {
                 text: note.text,
                 pinned: note.pinned,
             })
-
-            console.log("Now updating")
-
-            // setSelectedNote(updatedNote)
         }
     }
 
     const onTogglePin = async (note) => {
         console.log("toggling", note)
-        const response = await fetch(
-            `http://localhost:5000/update_note/${note.id}`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    authorization: `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify({ pinned: !note.pinned }),
-            }
-        )
+        const response = await fetch(`${SERVER_URL}/update_note/${note.id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({ pinned: !note.pinned }),
+        })
         const json = await response.json()
-        setSelectedNote(json.note)
+
+        if (response.status >= 400) {
+            setError(json.message)
+        } else {
+            setSelectedNote(json.note)
+        }
     }
     const getNoteById = async (id) => {
         console.log("getting note", id)
-        const response = await fetch(`http://localhost:5000/note/${id}`, {
+        const response = await fetch(`${SERVER_URL}/note/${id}`, {
             headers: {
                 authorization: `Bearer ${accessToken}`,
             },
         })
         const json = await response.json()
-        return json.note
+
+        if (response.status >= 400) {
+            setError(json.message)
+        } else {
+            return json.note
+        }
     }
     const onSelectNote = async (id) => {
         if (selectedNote.id) {
-            await fetch(
-                `http://localhost:5000/update_note/${selectedNote.id}`,
+            const response = await fetch(
+                `${SERVER_URL}/update_note/${selectedNote.id}`,
                 {
                     method: "POST",
                     headers: {
@@ -152,21 +170,29 @@ const Home = ({ accessToken, setAccessToken }) => {
                     }),
                 }
             )
+            const json = await response.json()
+            if (response.status >= 400) {
+                setError(json.message)
+            }
         }
 
         if (tablet) setShowNotesBox(false)
         const note = await getNoteById(id)
-        console.log("selecting a note...")
         setSelectedNote(note)
     }
 
     const onSignOut = async () => {
-        await fetch("http://localhost:5000/auth/signout", {
+        const response = await fetch(`${SERVER_URL}/auth/signout`, {
             method: "DELETE",
             credentials: "include",
         })
-        setAccessToken("")
-        navigate("/signin")
+        if (response.status >= 400) {
+            const json = await response.json()
+            setError(json.message)
+        } else {
+            setAccessToken("")
+            navigate("/signin")
+        }
     }
 
     return (
@@ -181,6 +207,8 @@ const Home = ({ accessToken, setAccessToken }) => {
             >
                 <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
             </button>
+            <Alert error={error} setError={setError} />
+
             <NoteView note={selectedNote} updateNote={updateNote} />
             <Notes
                 notes={notes}
