@@ -96,10 +96,15 @@ form{
 	color: #000;
 }
 
-.switch-signin{
+.forgot-password{
+	margin-top: 10px;
+	font-size: 10px;
+}
+
+.switch-signin, .forgot-password{
 	text-align: center;
 }
-.switch-signin a{
+.switch-signin a, .forgot-password a{
 	text-decoration: none;
 	color: #A1A1A1;
 	font-size: 1rem;
@@ -109,8 +114,12 @@ form{
 	color: #5cacd4;
 	margin-left: 1rem;
 }
+.forgot-password a span{
+	color: #5cacd4;
+	margin-left: 5px;
+}
 
-.switch-signin a span:hover{
+.switch-signin a span:hover, .forgot-password a span:hover{
 	color: #5cacd4;
 	padding-bottom: 2px;
 	border-bottom: 1px solid #5cacd4;

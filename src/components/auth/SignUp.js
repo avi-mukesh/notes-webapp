@@ -3,10 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom"
 import SignInForm from "./SignInForm.js"
 import SignUpForm from "./SignUpForm.js"
 
-const SignUp = ({ accessToken, setAccessToken }) => {
+const SignUp = ({ accessToken, setAccessToken, setAlert }) => {
     const navigate = useNavigate()
     const location = useLocation()
-
     useEffect(() => {
         if (accessToken) navigate("/home")
     }, [accessToken, navigate])
@@ -14,9 +13,12 @@ const SignUp = ({ accessToken, setAccessToken }) => {
     return (
         <div className="form-container">
             {location.pathname === "/signin" ? (
-                <SignInForm setAccessToken={setAccessToken} />
+                <SignInForm
+                    setAccessToken={setAccessToken}
+                    setAlert={setAlert}
+                />
             ) : (
-                <SignUpForm />
+                <SignUpForm setAlert={setAlert} />
             )}
         </div>
     )

@@ -7,19 +7,23 @@ import {
     faLock,
     faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons"
-import Alert from "../Alert"
 
+import { ALERT_TYPES } from "../../consts.js"
 import { SERVER_URL } from "../../consts.js"
 
-const SignUpForm = () => {
-    const [error, setError] = useState("")
-
+const SignUpForm = ({ setAlert }) => {
     const [username, setUsername] = useState("avi")
     const [email, setEmail] = useState("avimukesh10@gmail.com")
     const [password, setPassword] = useState("my-password")
     const [confirmPassword, setConfirmPassword] = useState("my-password")
 
     const signupSubmit = async (e) => {
+        if (confirmPassword !== password)
+            return setAlert({
+                type: ALERT_TYPES.ERROR,
+                message: "Passwords need to match",
+            })
+
         try {
             e.preventDefault()
             console.log("trying to sign up")
@@ -34,16 +38,18 @@ const SignUpForm = () => {
             })
             let json = await result.json()
             if (result.status >= 400) {
-                setError(json.message)
+                setAlert({ type: ALERT_TYPES.ERROR, message: json.message })
             }
         } catch (err) {
-            setError("Error: couldn't sign up")
+            setAlert({
+                type: ALERT_TYPES.ERROR,
+                message: "Error: couldn't sign up",
+            })
         }
     }
 
     return (
         <>
-            <Alert error={error} setError={setError} />
             <span className="form-heading">Sign up</span>
             <form onSubmit={signupSubmit}>
                 <RegInput
