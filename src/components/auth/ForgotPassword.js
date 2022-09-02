@@ -2,7 +2,7 @@ import RegInput from "./RegInput.js"
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons"
 import { useState } from "react"
 
-const ForgotPassword = ({ sendPasswordResetLink }) => {
+const ForgotPassword = ({ sendPasswordResetLink, setAlert }) => {
     const [email, setEmail] = useState("avimukesh10@gmail.com")
 
     return (

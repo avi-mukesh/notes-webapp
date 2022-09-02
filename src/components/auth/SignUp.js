@@ -7,7 +7,11 @@ const SignUp = ({ accessToken, setAccessToken, setAlert }) => {
     const navigate = useNavigate()
     const location = useLocation()
     useEffect(() => {
-        if (accessToken) navigate("/home")
+        console.log(accessToken)
+        if (accessToken) {
+            console.log("logged in already")
+            navigate("/home")
+        }
     }, [accessToken, navigate])
 
     return (

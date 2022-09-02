@@ -32,6 +32,7 @@ const App = () => {
             if (result.status >= 400) {
                 setAlert({ type: ALERT_TYPES.ERROR, message: json.message })
             } else {
+                console.log("setting access token")
                 setAccessToken(json.accessToken)
             }
         }
@@ -49,6 +50,8 @@ const App = () => {
         const json = await response.json()
         if (response.status >= 400) {
             setAlert({ type: ALERT_TYPES.ERROR, message: json.message })
+        } else {
+            setAlert({ type: ALERT_TYPES.SUCCESS, message: "Check your email" })
         }
     }
 
@@ -112,6 +115,7 @@ const App = () => {
                         element={
                             <ForgotPassword
                                 sendPasswordResetLink={sendPasswordResetLink}
+                                setAlert={setAlert}
                             />
                         }
                     />

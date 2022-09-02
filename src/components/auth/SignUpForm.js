@@ -12,10 +12,10 @@ import { ALERT_TYPES } from "../../consts.js"
 import { SERVER_URL } from "../../consts.js"
 
 const SignUpForm = ({ setAlert }) => {
-    const [username, setUsername] = useState("avi")
-    const [email, setEmail] = useState("avimukesh10@gmail.com")
-    const [password, setPassword] = useState("my-password")
-    const [confirmPassword, setConfirmPassword] = useState("my-password")
+    const [username, setUsername] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
 
     const signupSubmit = async (e) => {
         if (confirmPassword !== password)

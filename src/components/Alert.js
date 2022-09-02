@@ -25,7 +25,7 @@ const Alert = ({ alert, setAlert }) => {
             <button onClick={() => setAlert({ type: "", message: "" })}>
                 x
             </button>
-            <h3 className="alertHeading">Error</h3>
+            <h3 className="alertHeading">{alert.type}</h3>
             <p>{alert.message}</p>
         </div>
     )

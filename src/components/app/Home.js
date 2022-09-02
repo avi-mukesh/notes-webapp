@@ -5,17 +5,18 @@ import { useMediaQuery } from "react-responsive"
 import { useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
-import Alert from "../Alert.js"
 
 import { SERVER_URL } from "../../consts.js"
 import { ALERT_TYPES } from "../../consts.js"
+import useLocalStorage from "../../hooks/useLocalStorage"
 
 const Home = ({ accessToken, setAccessToken, setAlert }) => {
     const navigate = useNavigate()
 
     const tablet = useMediaQuery({ maxWidth: "900px" })
 
-    const [notes, setNotes] = useState([])
+    const [notes, setNotes] = useLocalStorage("notes", [])
+    // const [notes, setNotes] = useState([])
     const [selectedNote, setSelectedNote] = useState({})
     const [showNotesBox, setShowNotesBox] = useState(false)
 
@@ -183,6 +184,8 @@ const Home = ({ accessToken, setAccessToken, setAlert }) => {
     }
 
     const onSignOut = async () => {
+        setNotes([])
+
         const response = await fetch(`${SERVER_URL}/auth/signout`, {
             method: "DELETE",
             credentials: "include",

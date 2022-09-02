@@ -9,8 +9,8 @@ import { ALERT_TYPES } from "../../consts.js"
 import { SERVER_URL } from "../../consts.js"
 
 const SignInForm = ({ setAccessToken, setAlert }) => {
-    const [username, setUsername] = useState("avi")
-    const [password, setPassword] = useState("my-password")
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
 
     const navigate = useNavigate()
 
