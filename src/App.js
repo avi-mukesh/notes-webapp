@@ -32,7 +32,6 @@ const App = () => {
             if (result.status >= 400) {
                 setAlert({ type: ALERT_TYPES.ERROR, message: json.message })
             } else {
-                console.log("setting access token")
                 setAccessToken(json.accessToken)
             }
         }
@@ -41,7 +40,6 @@ const App = () => {
     }, [])
 
     const sendPasswordResetLink = async (email) => {
-        console.log(email)
         const response = await fetch(`${SERVER_URL}/auth/forgot_password`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -70,7 +68,6 @@ const App = () => {
                 type: ALERT_TYPES.SUCCESS,
                 message: "Password changed successfully",
             })
-            console.log(json.user)
         }
     }
 

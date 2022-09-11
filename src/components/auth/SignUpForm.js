@@ -18,15 +18,18 @@ const SignUpForm = ({ setAlert }) => {
     const [confirmPassword, setConfirmPassword] = useState("")
 
     const signupSubmit = async (e) => {
-        if (confirmPassword !== password)
+        e.preventDefault()
+        if (confirmPassword !== password) {
+            setPassword("")
+            setConfirmPassword("")
             return setAlert({
                 type: ALERT_TYPES.ERROR,
                 message: "Passwords need to match",
             })
+        }
 
         try {
             e.preventDefault()
-            console.log("trying to sign up")
             let result = await fetch(`${SERVER_URL}/auth/signup`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -39,6 +42,15 @@ const SignUpForm = ({ setAlert }) => {
             let json = await result.json()
             if (result.status >= 400) {
                 setAlert({ type: ALERT_TYPES.ERROR, message: json.message })
+            } else {
+                setAlert({
+                    type: ALERT_TYPES.SUCCESS,
+                    message: "Success! You can now sign in",
+                })
+                setUsername("")
+                setEmail("")
+                setPassword("")
+                setConfirmPassword("")
             }
         } catch (err) {
             setAlert({

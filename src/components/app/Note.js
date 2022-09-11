@@ -22,7 +22,6 @@ const Note = ({ note, onSelectNote, onDeleteNote, onTogglePin }) => (
             <button
                 className="togglePinButton"
                 onClick={() => {
-                    console.log(note)
                     onTogglePin(note)
                 }}
             >

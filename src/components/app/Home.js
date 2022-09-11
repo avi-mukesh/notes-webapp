@@ -86,7 +86,6 @@ const Home = ({ accessToken, setAccessToken, setAlert }) => {
     }
 
     const createNote = async (note) => {
-        console.log("Creating note")
         const response = await fetch(`${SERVER_URL}/create_note`, {
             method: "POST",
             headers: {
@@ -112,7 +111,6 @@ const Home = ({ accessToken, setAccessToken, setAlert }) => {
         if (!note.id) {
             createNote(note)
         } else {
-            console.log(selectedNote)
             setSelectedNote({
                 ...selectedNote,
                 title: note.title,
@@ -123,7 +121,6 @@ const Home = ({ accessToken, setAccessToken, setAlert }) => {
     }
 
     const onTogglePin = async (note) => {
-        console.log("toggling", note)
         const response = await fetch(`${SERVER_URL}/update_note/${note.id}`, {
             method: "POST",
             headers: {
@@ -141,7 +138,6 @@ const Home = ({ accessToken, setAccessToken, setAlert }) => {
         }
     }
     const getNoteById = async (id) => {
-        console.log("getting note", id)
         const response = await fetch(`${SERVER_URL}/note/${id}`, {
             headers: {
                 authorization: `Bearer ${accessToken}`,
